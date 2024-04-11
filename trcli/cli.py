@@ -59,6 +59,8 @@ class Environment:
         self.run_description = None
         self.case_matcher = None
         self.special_parser = None
+        self.system_out = None
+        self.system_err = None
         self._case_fields = None
         self._result_fields = None
         self.allow_ms = False

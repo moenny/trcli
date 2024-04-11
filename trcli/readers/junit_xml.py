@@ -38,6 +38,8 @@ class JunitParser(FileParser):
         super().__init__(environment)
         self.case_matcher = environment.case_matcher
         self.special = environment.special_parser
+        self.system_out = environment.system_out
+        self.system_err = environment.system_err
 
     @classmethod
     def _add_root_element_to_tree(cls, filepath: Union[str, Path]) -> etree:
@@ -160,6 +162,13 @@ class JunitParser(FileParser):
                         result_fields=result_fields_dict,
                         custom_step_results=result_steps
                     )
+
+                    if self.system_err and case.system_err:
+                        result.prepend_comment(f"System-Err:\n{case.system_err}\n")
+
+                    if self.system_out and case.system_out:
+                        result.prepend_comment(f"System-Out:\n{case.system_out}\n")
+
                     for comment in reversed(comments):
                         result.prepend_comment(comment)
                     if sauce_session:
