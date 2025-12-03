@@ -48,6 +48,8 @@ class JunitParser(FileParser):
         self._case_matcher = environment.case_matcher
         self._special = environment.special_parser
         self._case_result_statuses = {"passed": 1, "skipped": 4,"error": 5, "failure": 5}
+        self._system_out = environment.system_out
+        self._system_err = environment.system_err
         self._update_with_custom_statuses()
 
     @classmethod
@@ -215,6 +217,12 @@ class JunitParser(FileParser):
                 status_id=status_id,
                 comment=comment,
             )
+
+            if self._system_err and case.system_err:
+                result.prepend_comment(f"System-Err:\n{case.system_err}\n")
+
+            if self._system_out and case.system_out:
+                result.prepend_comment(f"System-Out:\n{case.system_out}\n")
 
             for comment in reversed(comments):
                 result.prepend_comment(comment)

@@ -14,6 +14,8 @@ from trcli.readers.junit_xml import JunitParser
 
 @click.command(context_settings=CONTEXT_SETTINGS)
 @results_parser_options
+@click.option("--system-out", is_flag=True, help="Insert System-Out in comment")
+@click.option("--system-err", is_flag=True, help="Insert System-Err in comment")
 @click.option(
     "--special-parser",
     metavar="",
