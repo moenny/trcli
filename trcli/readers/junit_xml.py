@@ -50,6 +50,8 @@ class JunitParser(FileParser):
         self._case_result_statuses = {"passed": 1, "skipped": 4, "error": 5, "failure": 5}
         self.invalid_quality_ratings_found = False  # Track if any quality ratings were invalid
         self._update_with_custom_statuses()
+        self._system_out = environment.system_out
+        self._system_err = environment.system_err
 
     @classmethod
     def _add_root_element_to_tree(cls, filepath: Union[str, Path]) -> etree:
@@ -303,6 +305,12 @@ class JunitParser(FileParser):
                         comment=comment,
                         quality_rating=quality_rating,
                     )
+
+                    if self._system_err and case.system_err:
+                        result.prepend_comment(f"System-Err:\n{case.system_err}\n")
+
+                    if self._system_out and case.system_out:
+                        result.prepend_comment(f"System-Out:\n{case.system_out}\n")
 
                     # Apply comment prepending
                     for comment_text in reversed(comments):
