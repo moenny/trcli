@@ -351,6 +351,12 @@ class JunitParser(FileParser):
                     quality_rating=quality_rating,
                 )
 
+                if self._system_err and case.system_err:
+                    result.prepend_comment(f"System-Err:\n{case.system_err}\n")
+
+                if self._system_out and case.system_out:
+                    result.prepend_comment(f"System-Out:\n{case.system_out}\n")
+
                 for comment_text in reversed(comments):
                     result.prepend_comment(comment_text)
                 if sauce_session:
